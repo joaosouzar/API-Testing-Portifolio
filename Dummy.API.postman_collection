@@ -1,0 +1,543 @@
+{
+  "info": {
+    "_postman_id": "8c4e5851-5dc1-4a46-a9c8-efb75abd97d8",
+    "name": "Dummy API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "48599776",
+    "_collection_link": "https://go.postman.co/collection/48599776-8c4e5851-5dc1-4a46-a9c8-efb75abd97d8?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Login",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "",
+                  "pm.test(\"Username correto retornado\", function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.username).to.eql(\"emilys\");",
+                  "});",
+                  "",
+                  "pm.environment.set(\"accessToken\", response.accessToken);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"emilys\",\r\n\"password\": \"emilyspass\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{Base_Url}}{{Login}}",
+              "host": [
+                "{{Base_Url}}{{Login}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login Inválido",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code é 400 para credenciais inválidas\", function () {\r",
+                  "    pm.response.to.have.status(400);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Mensagem de erro presente\", function () {\r",
+                  "    const response = pm.response.json();\r",
+                  "    pm.expect(response).to.have.property(\"message\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"usuarioinvalido\",\r\n        \"password\": \"senhaerrada\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{Base_Url}}{{Login}}",
+              "host": [
+                "{{Base_Url}}{{Login}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Usuario",
+      "item": [
+        {
+          "name": "buscar usuario",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{Base_Url}}{{usuário}}/1",
+              "host": [
+                "{{Base_Url}}{{usuário}}"
+              ],
+              "path": [
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Produto",
+      "item": [
+        {
+          "name": "buscar produto",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Body matches string\", function () {",
+                  "    pm.expect(pm.response.text()).to.include(\"products\");",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "const ids = response.products.map(p => p.id);",
+                  "",
+                  "pm.test(\"Quantidade de IDs encontrados: \" + ids.length, function () {",
+                  "    pm.expect(ids.length).to.be.above(0);",
+                  "});",
+                  "",
+                  "console.log(\"IDs encontrados (\" + ids.length + \"):\", ids);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{Base_Url}}/products",
+              "host": [
+                "{{Base_Url}}"
+              ],
+              "path": [
+                "products"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "buscar todos produtos",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();",
+                  "const produtos = response.products;",
+                  "const total = response.total;",
+                  "const retornados = produtos.length;",
+                  "",
+                  "pm.test(`Produtos encontrados: ${retornados} (de ${total} no total)`, function () {",
+                  "    pm.expect(retornados).to.be.above(0);",
+                  "});",
+                  "",
+                  "console.log(`Produtos retornados: ${retornados}`);",
+                  "console.log(`Total disponível na API: ${total}`);",
+                  "",
+                  "const template = `",
+                  "<style>",
+                  "    body { font-family: Arial, sans-serif; padding: 16px; }",
+                  "    .card { background: #f0f4ff; border-radius: 8px; padding: 20px; display: inline-block; min-width: 200px; text-align: center; margin: 8px; }",
+                  "    .number { font-size: 48px; font-weight: bold; color: #6c63ff; }",
+                  "    .label { font-size: 14px; color: #555; margin-top: 4px; }",
+                  "</style>",
+                  "<h3>Resultado da busca de produtos</h3>",
+                  "<div class=\"card\">",
+                  "    <div class=\"number\">{{retornados}}</div>",
+                  "    <div class=\"label\">Produtos retornados</div>",
+                  "</div>",
+                  "<div class=\"card\">",
+                  "    <div class=\"number\">{{total}}</div>",
+                  "    <div class=\"label\">Total disponível na API</div>",
+                  "</div>",
+                  "`;",
+                  "",
+                  "pm.visualizer.set(template, { retornados, total });"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{Base_Url}}/products?limit=194",
+              "host": [
+                "{{Base_Url}}"
+              ],
+              "path": [
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "194"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Post",
+      "item": [
+        {
+          "name": "adicionar post",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "});\r",
+                  "pm.test(\"Successful POST request\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201, 202]);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"title\": \"I am in love with someone.\",\r\n    \"userId\": \"5\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{Base_Url}}/posts/add",
+              "host": [
+                "{{Base_Url}}"
+              ],
+              "path": [
+                "posts",
+                "add"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "buscar unico post",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{Base_Url}}/posts/120",
+              "host": [
+                "{{Base_Url}}"
+              ],
+              "path": [
+                "posts",
+                "120"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "buscar post por usuario",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{Base_Url}}/posts/user/5",
+              "host": [
+                "{{Base_Url}}"
+              ],
+              "path": [
+                "posts",
+                "user",
+                "5"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar todos os posts",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{Base_Url}}/posts",
+              "host": [
+                "{{Base_Url}}"
+              ],
+              "path": [
+                "posts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "deletar post",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Recurso marcado como deletado\", function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.isDeleted).to.be.true;",
+                  "});",
+                  "",
+                  "pm.test(\"Campo deletedOn está presente\", function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property(\"deletedOn\");",
+                  "    pm.expect(response.deletedOn).to.not.be.null;",
+                  "});",
+                  "",
+                  "pm.test(\"ID do recurso deletado está presente\", function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property(\"id\");",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{Base_Url}}/posts/10",
+              "host": [
+                "{{Base_Url}}"
+              ],
+              "path": [
+                "posts",
+                "10"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar post",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Título existe\", function () {\r",
+                  "    pm.expect(response.title).to.exist;\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Título atualizado\", function () {\r",
+                  "    pm.expect(response.title)\r",
+                  "      .to.eql(\"I think you should shift to the moon\");\r",
+                  "});\r",
+                  "\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "\r\n{\r\n    \"title\": \"I think you should shift to the moon\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{Base_Url}}/posts/1",
+              "host": [
+                "{{Base_Url}}"
+              ],
+              "path": [
+                "posts",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Imagens",
+      "item": [
+        {
+          "name": "Buscar imagem",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{Base_Url}}/image/150",
+              "host": [
+                "{{Base_Url}}"
+              ],
+              "path": [
+                "image",
+                "150"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
