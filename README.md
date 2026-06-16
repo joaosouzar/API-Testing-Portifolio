@@ -62,6 +62,7 @@ Os relatórios incluem:
 
 ## 📁 Estrutura do Repositório
 
+```text
 api-testing-postman-portfolio/
 │
 ├── collections/
@@ -71,14 +72,16 @@ api-testing-postman-portfolio/
 │   └── Dummy.postman_environment.json
 │
 ├── reports/
-│   └── newman-report.html
+│   ├── newman-report.html
+│   └── execution-summary.png
 │
 ├── test-cases/
 │   └── test-cases.md
 │
 └── README.md
-
+```
 ---
+
 
 # 👨‍💻 Autor
 
